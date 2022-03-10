@@ -13,6 +13,7 @@ class App extends React.Component {
     //Bindings
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
+    this.updatePlaylistName = this.updatePlaylistName.bind(this)
     // Hard coded value change later
     this.state = {
       SearchResults: [
@@ -34,10 +35,14 @@ class App extends React.Component {
   }
   //Method to remove track from list
   removeTrack(saveTrack) {
-    let newPlaylist = this.state.Playlist.filter(list => saveTrack.id != list.id);
-    this.setState(Playlist, newPlaylist);
+    let newPlaylist = this.state.PlaylistTracks.filter(list => saveTrack.id !== list.id);
+    this.setState({playlistTracks: newPlaylist});
   }
 
+  //Method to change playlist name
+  updatePlaylistName (name) {
+    this.setState({playlistName: name})
+  }
   render() {
     return (
       <div>
@@ -51,7 +56,8 @@ class App extends React.Component {
             onRemove={this.removeTrack}
             playListName={this.state.playlistName}
             playlistTracks={this.state.playlistTracks}
-            isRemoval={true}/>
+            isRemoval={true}
+            onNameChange={this.updatePlaylistName}/>
           </div>
         </div>
       </div>
