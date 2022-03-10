@@ -3,13 +3,20 @@ import './Track.css'
 
 
 export default class Track extends React.Component {
-
+  constructor(props){
+    super(props);
+    this.addTrack = this.addTrack.bind(this);
+  }
+  //Add track to playlist
+  addTrack() {
+    this.props.onAdd(this.props.track);
+  }
 
   renderAction() {
     if (this.props.isRemoval) {
       return <button className = 'Track-Action'>-</button>
     } else {
-      return <button className='Track-Action'>+</button>;
+      return <button className='Track-Action' onClick={this.addTrack}>+</button>;
     }
   }
 
@@ -21,7 +28,7 @@ export default class Track extends React.Component {
           <h3>track name will go here</h3>
           <p>track artist will go here | track album will go here</p>
         </div>
-        {this.renderAction}
+        {this.renderAction()}
       </div>)
   }
 }

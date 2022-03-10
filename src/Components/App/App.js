@@ -10,6 +10,9 @@ class App extends React.Component {
   constructor(props) {
     super(props)
 
+    //Bindings
+    this.addTrack = this.addTrack.bind(this);
+    
     // Hard coded value change later
     this.state = {
       SearchResults: [
@@ -22,6 +25,14 @@ class App extends React.Component {
       {name: 'name1', artist: 'artist1', album: 'album', id:1}]
       }; 
   }
+  //Method to update track list
+  addTrack (savedTrack) {
+    if(this.state.playlistTracks.find(track => 
+      track.id === savedTrack.id)){
+        return;
+      }
+  }
+
   render() {
     return (
       <div>
@@ -29,8 +40,9 @@ class App extends React.Component {
         <div className="App">
           <SearchBar />
           <div className="App-playlist">
-            <SearchResults SearchResults={this.state.SearchResults} />
+            <SearchResults SearchResults={this.state.SearchResults} onAdd={this.addTrack} />
             <Playlist SearchResults={this.state.SearchResults} 
+            onAdd={this.addTrack}
             playListName={this.state.playlistName}
             playlistTracks={this.state.playlistTracks}/>
           </div>
