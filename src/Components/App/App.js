@@ -7,12 +7,12 @@ class App extends React.Component {
     super(props)
 
     // Hard coded value change later
-    this.state = {SearchResults: [{
-      name: '',
-      artist: '',
-      album: '',
-      id: '',
-    }]} 
+    this.state = {
+      SearchResults: [
+        { name: '', artist: '', album: '', id: 1},
+        { name: '', artist: '', album: '', id: 2},
+        { name: '', artist: '', album: '', id: 3}]
+      }; 
   }
   render() {
     return (
