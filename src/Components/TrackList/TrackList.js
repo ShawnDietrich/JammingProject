@@ -1,12 +1,23 @@
 import React from 'react'
-import './TrackList'
+import './TrackList.css'
+import Track from '../Track/Track'
 
-export class TrackList extends React.Component {
-
+export default class TrackList extends React.Component {
   render() {
+    let newTrack = {};
+    //newTrack = this.props.tracks.map(track => {return track})
     return (
+      
       <div className="TrackList">
-        <Track />
+        {
+          
+          
+          //<Track track={this.props.tracks} /> 
+          //this.props.tracks.map(track => 
+            //{return <Track track={track} />}
+        //  )
+        }
+        
       </div>)
   }
 }

@@ -1,8 +1,8 @@
 import React from 'react'
-import './Track'
+import './Track.css'
 
 
-export class Track extends React.Component {
+export default class Track extends React.Component {
 
 
   renderAction() {
@@ -13,7 +13,7 @@ export class Track extends React.Component {
     }
   }
 
-  renderAction() {
+  render() {
 
     return (
       <div className="Track">
