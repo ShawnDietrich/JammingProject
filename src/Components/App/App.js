@@ -3,7 +3,17 @@ import './App.css';
 import React from 'react'
 
 class App extends React.Component {
+  constructor(props) {
+    super(props)
 
+    // Hard coded value change later
+    this.state = {SearchResults: [{
+      name: '',
+      artist: '',
+      album: '',
+      id: '',
+    }]} 
+  }
   render() {
     return (
       <div>
@@ -11,7 +21,7 @@ class App extends React.Component {
         <div className="App">
           <SearchBar />
           <div className="App-playlist">
-            <SearchResults />
+            <SearchResults searchResults={this.state.SearchResults} />
             <Playlist />
           </div>
         </div>
