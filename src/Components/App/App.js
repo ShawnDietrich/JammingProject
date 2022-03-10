@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import logo from './logo.ico';
 import './App.css';
 import React from 'react'
 
@@ -15,7 +15,11 @@ class App extends React.Component {
       SearchResults: [
         { name: 'name1', artist: 'artist1', album: 'album1', id: 1},
         { name: 'name2', artist: 'artist2', album: 'album2', id: 2},
-        { name: 'name3', artist: 'artist3', album: 'album3', id: 3}]
+        { name: 'name3', artist: 'artist3', album: 'album3', id: 3}],
+      playlistName: "",
+      playlistTracks: [{name: 'name1', artist: 'artist1', album: 'album', id:1},
+      {name: 'name1', artist: 'artist1', album: 'album', id:1},
+      {name: 'name1', artist: 'artist1', album: 'album', id:1}]
       }; 
   }
   render() {
@@ -26,7 +30,9 @@ class App extends React.Component {
           <SearchBar />
           <div className="App-playlist">
             <SearchResults SearchResults={this.state.SearchResults} />
-            <Playlist />
+            <Playlist SearchResults={this.state.SearchResults} 
+            playListName={this.state.playlistName}
+            playlistTracks={this.state.playlistTracks}/>
           </div>
         </div>
       </div>
