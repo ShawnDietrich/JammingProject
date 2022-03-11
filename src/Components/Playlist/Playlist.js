@@ -9,8 +9,8 @@ export default class Playlist extends React.Component {
     this.handleNameChange = this.handleNameChange.bind(this)
   }
 
-  handleNameChange (e) {
-    this.onNameChange(e.target.value);
+  handleNameChange (event) {
+    this.props.onNameChange(event.target.value);
   }
 
   render() {
@@ -18,7 +18,7 @@ export default class Playlist extends React.Component {
     return (
       <div className="Playlist">
         <input defaultValue={'New Playlist'} onChange={this.handleNameChange}/>
-        <TrackList tracks={this.props.SearchResults} 
+        <TrackList tracks={this.props.playlistTracks} 
         onAdd={this.props.onAdd}
         onRemove={this.props.onRemove}
         isRemoval={true}
