@@ -7,10 +7,19 @@ export default class Playlist extends React.Component {
     super(props)
 
     this.handleNameChange = this.handleNameChange.bind(this)
+    this.handleEnterEvent = this.handleEnterEvent.bind(this);
+  }
+
+  //life cycle events
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleEnterEvent);
   }
 
   handleNameChange (event) {
     this.props.onNameChange(event.target.value);
+  }
+  handleEnterEvent(event) {
+    //if (event ==='Enter') this.props.onSave();
   }
 
   render() {
