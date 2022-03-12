@@ -2,8 +2,8 @@
 let userToken = '';
 let expiresIn = 0;
 const clientID = "76f5cd4412374716bfb8bbc6101635e5";
-const redirectURL = "http://localhost:3000/";
-//'http://PlaylistCreate.surge.sh';
+const redirectURL = //"http://localhost:3000/";
+'http://PlaylistCreate.surge.sh';
 const endPoint = "https://api.spotify.com/v1/me";
 export const Spotify = {
 
