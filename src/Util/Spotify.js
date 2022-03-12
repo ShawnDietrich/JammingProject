@@ -2,7 +2,7 @@
 let userToken = '';
 let expiresIn = 0;
 const clientID = "76f5cd4412374716bfb8bbc6101635e5";
-const redirectURL = 'http://localhost:3000/';
+const redirectURL = 'http://PlaylistCreate.surge.sh';
 
 export const Spotify = {
 
@@ -19,6 +19,7 @@ export const Spotify = {
     if (accessTokenMatch && expiresInMatch) {
       userToken = accessTokenMatch[1];
       expiresIn = Number(expiresInMatch[1]);
+      //console.log('Expires in '+ expiresIn)
       //Clear values to prevent looping
       window.setTimeout(() => userToken = '', expiresIn * 1000);
       window.history.pushState('Access Token', null, '/');
@@ -34,29 +35,19 @@ export const Spotify = {
       headers: { Authorization: `Bearer ${accessToken}` }
     }
     //send search term to spotify
-    const startSearch = async () => {
-      const endPoint = `https://api.spotify.com/v1/search?type=track&q=${userTerm}`
-      try {
-        const response = await fetch(endPoint, authHeader);
-        if (response.ok) {
-          let jsonResponse = await response.json();
-          if (!jsonResponse.tracks) {
-            return [];
-          } else {
-            return jsonResponse.tracks.items.map(track => ({
-              id: track.id,
-              name: track.name,
-              artist: track.artist[0].name,
-              album: track.artist.album,
-              uri: track.uri
-            }))
-          }
-        }
-        throw new 'error'()
-      } catch (error) {
-        console.log(error.message)
-      }
-    }
+    const endPoint = `https://api.spotify.com/v1/search?type=track&q=${userTerm}`
+    //send fetch to spotify api
+    return fetch(endPoint, authHeader)
+      .then(response => response.json())
+      .then(jsonResponse => {
+        return jsonResponse.tracks.items.map(track => ({
+          id: track.id,
+          name: track.name,
+          artist: track.artists[0].name,
+          album: track.artists.album,
+          uri: track.uri
+        }));
+      });
   },
 
   savePlaylist(playlistName, trackUris) {
@@ -67,30 +58,31 @@ export const Spotify = {
     const endPoint = "https://api.spotify.com/v1/me"
     const accessToken = this.getAccessToken();
     const authHeader = { Authorization: `Bearer ${accessToken}` }
-
-    let userId
+    //Send user ID request
+    let userId;
     return fetch(endPoint, { headers: authHeader })
       .then(response => response.json())
       .then(jsonResponse => {
-        userId = jsonResponse;
-        //set post request to create playlist
+        userId = jsonResponse.id;
+        console.log("User ID " + userId);
 
-        return fetch(`https://api.spotify.com/v1/users/${userId}/playlists `, {
+        //set post request to create playlist
+        return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
           headers: authHeader,
-          method: "POST",
-          body: JSON.stringify({name: playlistName, public: false, description: "Created using Shawn's web app"})
-        }).then (response => response.json())
+          method: 'POST',
+          body: JSON.stringify({ name: playlistName})
+        }).then(response => response.json())
           .then(jsonResponse => {
-            const playlistId = jsonResponse.id
-            
+            let playlistId = jsonResponse.id
+            console.log('Playlist created! ' + playlistId)
             //Add Tracks to the playlist 
-            return fetch(`https://api.spotify.com//v1/users/${userId}/playlists/${playlistId}/tracks`, {
-            headers: authHeader,
-            method: "POST",
-            data: JSON.stringify({uris: trackUris})
+            return fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`, {
+              headers: authHeader,
+              method: "POST",
+              body: JSON.stringify({ uris: trackUris })
             }).then(response => response.json())
               .then(jsonResponse => {
-                const playlistID =jsonResponse.id
+                console.log('Tracks Added To Playlist ' + jsonResponse.snapshot_id)
               })
           })
       })
