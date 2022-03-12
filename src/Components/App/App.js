@@ -18,6 +18,7 @@ class App extends React.Component {
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
     this.search = this.search.bind(this);
+    this.loadPlaylist = this.loadPlaylist.bind(this);
 
     // Hard coded value change later
     this.state = {
@@ -59,12 +60,18 @@ class App extends React.Component {
   }
   //Serch function
   search(serchTerm) {
-    //console.log(serchTerm);
     Spotify.search(serchTerm).then(results => {
       this.setState({ SearchResults: results });
-      //console.log(this.setState.SearchResults);
     })
-
+  };
+  //Load playlist
+  loadPlaylist() {
+    Spotify.loadPlaylist(this.state.playlistName)
+    .then(results => {
+      this.setState({playlistTracks: results})
+    })
+    //.catch(err => {alert("No Such Playlist")})
+    ;
   }
 
 
@@ -84,6 +91,7 @@ class App extends React.Component {
               isRemoval={true}
               onNameChange={this.updatePlaylistName}
               onSave={this.savePlaylist}
+              onLoad={this.loadPlaylist}
             />
           </div>
         </div>

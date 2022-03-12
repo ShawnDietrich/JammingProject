@@ -2,9 +2,9 @@
 let userToken = '';
 let expiresIn = 0;
 const clientID = "76f5cd4412374716bfb8bbc6101635e5";
-const redirectURL = //"http://localhost:3000/" 
-                    'http://PlaylistCreate.surge.sh';
-
+const redirectURL = "http://localhost:3000/";
+//'http://PlaylistCreate.surge.sh';
+const endPoint = "https://api.spotify.com/v1/me";
 export const Spotify = {
 
   getAccessToken() {
@@ -56,7 +56,6 @@ export const Spotify = {
     if (!playlistName || !trackUris.length) return
 
     //Get user ID
-    const endPoint = "https://api.spotify.com/v1/me"
     const accessToken = this.getAccessToken();
     const authHeader = { Authorization: `Bearer ${accessToken}` }
     //Send user ID request
@@ -71,7 +70,7 @@ export const Spotify = {
         return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
           headers: authHeader,
           method: 'POST',
-          body: JSON.stringify({ name: playlistName})
+          body: JSON.stringify({ name: playlistName })
         }).then(response => response.json())
           .then(jsonResponse => {
             let playlistId = jsonResponse.id
@@ -87,9 +86,53 @@ export const Spotify = {
               })
           })
       })
+  },
 
-
-
+  //Load playlist
+  loadPlaylist(playlistName) {
+    //check if playlist name is empty
+    if (!playlistName) return null
+    const accessToken = this.getAccessToken();
+    const headers = { Authorization: `Bearer ${accessToken}` }
+    let foundPlaylist = [];
+    //Send user ID request
+    let userId;
+    return fetch(endPoint, { headers: headers })
+      .then(response => response.json())
+      .then(jsonResponse => {
+        userId = jsonResponse.id;
+        //console.log("User ID " + userId);
+        
+        //Capture an array of the users playlists
+        return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {headers: headers})
+        .then(response => response.json())
+        .then(jsonResponse => {
+          let playlistArray = [{}];
+          jsonResponse.items.map(playlist =>{playlistArray.push({
+            name: playlist.name,
+            id: playlist.id
+          })});
+          console.log('Captured playlist array')
+          console.log(playlistArray)
+          //Look in array for playlist and id
+          foundPlaylist = playlistArray.find(item => (playlistName === item.name))
+          console.log(foundPlaylist)
+          //if (!foundPlaylist.length) return null;
+          // request tracks using playlist id
+          return fetch(`https://api.spotify.com/v1/playlists/${foundPlaylist.id}/tracks`, {headers: headers})
+          .then(response => response.json())
+          .then(jsonResponse => {
+            console.log('captured track list')
+            return jsonResponse.items.map(item => ({
+              id: item.track.id,
+              name: item.track.name,
+              artist: item.track.artists[0].name,
+              album: item.track.artists.album,
+              uri: item.track.uri
+            }));
+          })
+        })
+      })
   }
 }
 
