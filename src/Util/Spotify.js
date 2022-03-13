@@ -21,7 +21,6 @@ export const Spotify = {
     if (accessTokenMatch && expiresInMatch) {
       userToken = accessTokenMatch[1];
       expiresIn = Number(expiresInMatch[1]);
-      //console.log('Expires in '+ expiresIn)
       //Clear values to prevent looping
       window.setTimeout(() => userToken = '', expiresIn * 1000);
       window.history.pushState('Access Token', null, '/');
