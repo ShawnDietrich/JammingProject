@@ -107,8 +107,7 @@ export const Spotify = {
         return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {headers: headers})
         .then(response => response.json())
         .then(jsonResponse => {
-          let playlistArray = [{}];
-          jsonResponse.items.map(playlist =>{playlistArray.push({
+          let playlistArray = jsonResponse.items.map(playlist => {return playlistArray.push({
             name: playlist.name,
             id: playlist.id
           })});
