@@ -16,6 +16,9 @@ export default class SearchBar extends React.Component {
         document.addEventListener("keydown", this.enterEvent);
         //console.log('Enter event listener loaded')
     }
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.enterEvent);
+    }
 
     search() {
         this.props.onSearch(this.state.term);
@@ -24,7 +27,6 @@ export default class SearchBar extends React.Component {
         this.setState({ term: e.target.value })
     }
     enterEvent(event) {
-        
         if (event.code === "Enter") {
         console.log("Enter Key pressed searching " + this.state.term);
         this.search();}
